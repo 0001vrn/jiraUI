@@ -1,0 +1,29 @@
+<ngx-loading [show]="currentBoardId==-2 && !errorMessage"></ngx-loading>
+<div class="container">
+    <div class="col-md-12">
+        <h1 *ngIf='errorMessage'>{{errorMessage}}</h1>        
+      </div>
+    <div class="col-md-12">
+        <div class="col-md-4">
+      
+        </div>
+        
+        <div class="dropdown col-md-4 button-margin text-center" *ngIf="!errorMessage">
+          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            {{isSelected? currentProject : 'Select a project'}}
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+           <li *ngFor="let project of projects" (click)="open(project)"><a>{{project.name}}</a></li>
+          </ul>
+        </div>
+
+
+      
+        <div class="col-md-4">
+        </div>
+  </div>
+</div>
+    <app-sprint-details *ngIf="isSelected" [boardId]='currentBoardId'>
+      
+    </app-sprint-details>

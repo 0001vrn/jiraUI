@@ -1,0 +1,18 @@
+.card{
+    border: 2px solid #4CAF50;
+    padding: 10px;
+    border-radius: 50px 20px;
+    background-color:rgb(76, 135, 175);
+    color:white;
+    text-align: center
+}
+.red .ui-progressbar .ui-progressbar-value {
+    background: red;
+  }
+  .green .ui-progressbar .ui-progressbar-value {
+    background: green !important;
+  }
+  .red-parent .ui-progressbar {
+    background: lightgray;
+  }
+ 

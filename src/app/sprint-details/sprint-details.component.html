@@ -1,0 +1,53 @@
+<ngx-loading [show]="loading && !errorMessage"></ngx-loading>
+<div class="col-md-12">
+        <h1 *ngIf='errorMessage'>{{errorMessage}}</h1>        
+      </div>
+<div class="col-md-12 row" *ngIf="sprintDetails">
+
+        <div class="panel panel-primary">
+                <div class="panel-heading">{{sprintDetails.name}}</div>
+                <div class="panel-body">
+                    <div class="col-md-6">
+                        <div style="display: block">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">Total story points <span class="badge" style="float:right">{{sprintDetails.totalStoryPoints}}</span></div>
+                                <div class="panel-body" style="padding-bottom:0px"></div>
+                            </div>
+                        </div>
+                        <div>
+                                <div style="display: block">
+                                        <div class="panel panel-primary">
+                                                <div class="panel-heading">Hours Logged
+                                                    <app-datepicker style="padding-left:50px"></app-datepicker>
+                                                    <div class="pull-right clickable" (click)="toggleHoursLogged()"><i class="glyphicon" [ngClass]="{'glyphicon-triangle-top': isHoursLoggedUp, 'glyphicon-triangle-bottom': !isHoursLoggedUp }"></i>
+                                                    </div>
+                                                </div>
+                                                <div [@toggleHoursLogged]="stateHours" class="panel-body">
+                                                    <div *ngFor="let person of sprintDetails.timeChart">
+                                                        <h5>{{person.resourseName}}<div style="float:right">Hours logged : {{getFixedTime(person.timeChart.totalSpent)}}</div></h5>
+                                                    <p-progressBar [ngClass]="false?red:green" [value]="person.TotalSpent*100/6" [showValue]="false" unit="hours" ></p-progressBar></div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>  
+                    <div class="col-md-6">
+                            <div style="display: block">
+                                    <div class="panel panel-primary">
+                                            <div class="panel-heading">Original estimated</div>
+                                            <div class="panel-body">
+                                <canvas *ngIf="doughnutChartData" baseChart
+                                        [data]="doughnutChartData"
+                                        [labels]="doughnutChartLabels"
+                                        [chartType]="doughnutChartType"
+                                        (chartHover)="chartHovered($event)"
+                                        (chartClick)="chartClicked($event)"
+                                        [options]="option"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div> 
+        </div>
+        
+</div>
