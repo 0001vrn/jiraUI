@@ -12,7 +12,7 @@
 {
     background-color: white !important;
 }
-.mat-form-field-label
+.mat-form-field-label, .mat-input-element:disabled
 {
   color: white !important;
 }

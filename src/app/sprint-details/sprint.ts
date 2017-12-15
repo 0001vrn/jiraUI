@@ -28,6 +28,11 @@ export interface TimeChart
     originalEstimated :number;
     totalSpent:number;
 }
+
+export interface IndividualStoryPoints{
+    resourseName: string;
+    storyPointsAssigned: number;
+}
 // export interface myType {
 //     name : myType2;
 // }

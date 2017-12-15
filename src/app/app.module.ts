@@ -13,10 +13,10 @@ import { JiraApiService } from './boards/boards.service';
 import { LoadingModule } from 'ngx-loading';
 import { HttpClientModule } from "@angular/common/http";
 import { HttpClient } from '@angular/common/http/src/client';
-import {ChartsModule} from 'ng2-charts'
-import {ProgressBarModule} from 'primeng/primeng';
+import { ChartsModule} from 'ng2-charts'
+import { ProgressBarModule } from 'primeng/primeng';
 import { DatepickerComponent } from './shared/datepicker.component';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule,
   MatFormFieldModule,
   MatAutocompleteModule,
@@ -63,7 +63,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     BrowserAnimationsModule,
 
 
-   MatDatepickerModule,
+    MatDatepickerModule,
     MatFormFieldModule,
     MatAutocompleteModule,
     MatButtonModule,

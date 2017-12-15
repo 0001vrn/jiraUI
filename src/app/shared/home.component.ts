@@ -15,11 +15,11 @@ export class HomeComponent implements OnInit {
   isSelected = false;
   errorMessage: string;
  // Inject HttpClient into your component or service.
- constructor( private _boardsService: JiraApiService) {}
+ constructor(private _boardsService: JiraApiService) {}
  
  open(item) :void
  {
-      console.log(item);
+      //console.log(item);
       this.currentBoardId = item.id;
       this.currentProject = item.name;
       this.isSelected = true;
@@ -29,7 +29,13 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
  
     this._boardsService.getBoards()
-    .subscribe(board=>{this.currentBoardId=-1;this.projects=board[0].values;},error => {
+    .subscribe(board=>{
+      //console.log(board);  
+      this.currentBoardId=-1;
+      
+      this.projects=board["values"];
+    },
+      error => {
       this.errorMessage="Please try again or refresh the page";
     });
   } 

@@ -13,7 +13,7 @@
             {{isSelected? currentProject : 'Select a project'}}
             <span class="caret"></span>
           </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" style="margin-left:24%">
            <li *ngFor="let project of projects" (click)="open(project)"><a>{{project.name}}</a></li>
           </ul>
         </div>

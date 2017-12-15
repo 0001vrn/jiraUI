@@ -1,13 +1,14 @@
 import { Component, OnInit, Input, OnChanges, ViewEncapsulation } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HomeComponent } from '../shared/home.component';
-import { SprintDetail } from '../sprint-details/sprint';
+import { SprintDetail, ResourseTimeChart, IndividualStoryPoints } from '../sprint-details/sprint';
 import { JiraApiService } from '../boards/boards.service';
 import { BaseChartDirective } from 'ng2-charts/ng2-charts';
 import {state, trigger, stagger, animate, style, group, query, transition, keyframes} from '@angular/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { error } from 'selenium-webdriver';
 
 @Component({
   selector: 'app-sprint-details',
@@ -35,7 +36,7 @@ export class SprintDetailsComponent implements OnInit ,OnChanges {
   public doughnutChartLabels:string[]=[];
   public doughnutChartData:number[]=[];
   public totalTimeSpent:string;
-  public totalDaysLeft:number;
+  public totalDaysLeft;
   public isHoursLoggedUp: boolean;
   public isTimeEstUp: boolean;
   public doughnutChartType:string = 'doughnut';
@@ -45,17 +46,23 @@ export class SprintDetailsComponent implements OnInit ,OnChanges {
   public stateHours = "open";
   public stateTimeEst = "open";
   errorMessage: string;
+  loggedHoursResponse: Array<ResourseTimeChart>;
+  individualStoryPointsAssigned: Array<IndividualStoryPoints>;
+  isFromDate:boolean = false;
+  minDate;
+  maxDate;
   ngOnChanges(): void {
     //console.log('change called');
     this.loading=true;
     this.errorMessage="";
     this.myInit();
-  }
 
+  }
 
   sprintDetails: SprintDetail;
   @Input() boardId: string;
 
+  
   constructor(private http: HttpClient,private boardService:JiraApiService ) {
     
   }
@@ -80,27 +87,71 @@ export class SprintDetailsComponent implements OnInit ,OnChanges {
     this.red='red red-parent';
     this.green='green red-parent';
   }
-
+  onDateChange(myDate: string){
+    //console.log('here is date ' + myDate); 
+    this.loading = true;
+    
+    this.boardService.getLoggedHours(this.boardId,myDate).subscribe(res=>{
+      
+      this.loggedHoursResponse = res;
+      this.isFromDate = true;
+      this.loading = false;
+      //console.log('logged hours ' + JSON.stringify(this.loggedHoursResponse));
+    },error=>{
+      this.setError();
+      this.loading = false;
+      
+    });
+  }
   myInit()
   {
     if(this.ctr==0){
       this.ctr++;
       return;
     }
-    this.boardService.getActiveSprint(this.boardId).subscribe(res => {
+
+      this.boardService.getIndividualStoryPoints(this.boardId).subscribe(res => {
+        //console.log('individual sp : '+JSON.stringify(res));
+        this.individualStoryPointsAssigned = res;
+      }
+      ,error => {
+        this.setError();
+      });
+
+      this.boardService.getActiveSprint(this.boardId).subscribe(res => {
+      //console.log(res);
       this.sprintDetails =res[0];
       this.loading=false;
+      if(this.sprintDetails == undefined)
+      {  
+        this.setError();
+        return;
+      }
+      
+      this.minDate = new Date(this.sprintDetails.startDate);
+      this.maxDate = new Date(this.sprintDetails.endDate) > new Date()?new Date():new Date(this.sprintDetails.endDate);
+      
       this.totalDaysLeft = this.getTimeDuration(new Date(), this.sprintDetails.endDate);
-      console.log(this.totalDaysLeft);
+      //console.log(this.totalDaysLeft);
+      
       var x=this.sprintDetails.timeChart;
-      console.log(this.datePick);
+      this.isFromDate = false;
+      //console.log(this.datePick);
       this.doughnutChartData= x.map(x=>x["timeChart"]["originalEstimated"]);
       this.totalTimeSpent=this.getReadableTime(x.map(x=>x["timeChart"]["totalSpent"]).reduce((a,b)=>a+b)); 
       setTimeout( () => {this.doughnutChartLabels =  x.map(x=>x["resourseName"])});
       
     },error => {
-      this.errorMessage="Please try again or refresh the page";}
+      this.setError();
+      }
   );
+  }
+
+  resetError(){
+    this.errorMessage="";
+  }
+  setError(){
+    this.errorMessage="Please try again or refresh the page";
   }
 
   getReadableTime(seconds: number){
@@ -116,7 +167,7 @@ export class SprintDetailsComponent implements OnInit ,OnChanges {
     var eventEndTime = new Date(endDate);
     var duration = (((eventEndTime.valueOf() - eventStartTime.valueOf())/1000) % 604800) / 86400;
     if(duration > 0){
-      return duration;
+      return duration.toFixed(1);
     }
     else{
       return 0;
@@ -125,7 +176,7 @@ export class SprintDetailsComponent implements OnInit ,OnChanges {
  
  getFixedTime(seconds){
    var numHours = seconds/3600;
-   return numHours.toFixed(0);
+   return numHours.toFixed(1);
  }
   // events
   public chartClicked(e:any):void {
