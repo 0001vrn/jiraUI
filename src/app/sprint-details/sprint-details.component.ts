@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnChanges, ViewEncapsulation } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HomeComponent } from '../shared/home.component';
-import { SprintDetail, ResourseTimeChart, IndividualStoryPoints } from '../sprint-details/sprint';
+import { SprintDetail, ResourseTimeChart, IndividualStoryPoints, TimeTracking } from '../sprint-details/sprint';
 import { JiraApiService } from '../boards/boards.service';
 import { BaseChartDirective } from 'ng2-charts/ng2-charts';
 import {state, trigger, stagger, animate, style, group, query, transition, keyframes} from '@angular/animations';
@@ -48,6 +48,7 @@ export class SprintDetailsComponent implements OnInit ,OnChanges {
   errorMessage: string;
   loggedHoursResponse: Array<ResourseTimeChart>;
   individualStoryPointsAssigned: Array<IndividualStoryPoints>;
+  timeTrackingPerStory: Array<TimeTracking>;
   isFromDate:boolean = false;
   minDate;
   maxDate;
@@ -110,6 +111,13 @@ export class SprintDetailsComponent implements OnInit ,OnChanges {
       return;
     }
 
+      this.boardService.getSprintActualvsEstimated(this.boardId).subscribe(res =>{
+        this.timeTrackingPerStory = res;
+      }
+      ,error => {
+        this.setError();
+      });
+
       this.boardService.getIndividualStoryPoints(this.boardId).subscribe(res => {
         //console.log('individual sp : '+JSON.stringify(res));
         this.individualStoryPointsAssigned = res;
@@ -138,7 +146,10 @@ export class SprintDetailsComponent implements OnInit ,OnChanges {
       this.isFromDate = false;
       //console.log(this.datePick);
       this.doughnutChartData= x.map(x=>x["timeChart"]["originalEstimated"]);
-      this.totalTimeSpent=this.getReadableTime(x.map(x=>x["timeChart"]["totalSpent"]).reduce((a,b)=>a+b)); 
+      
+      //console.log(this.getReadableTime(x.map(x=>x["timeChart"]["totalSpent"]).reduce((a,b)=>a+b)));
+
+      this.totalTimeSpent=this.getReadableTime(x.map(x=>x["timeChart"]["originalEstimated"]).reduce((a,b)=>a+b)); 
       setTimeout( () => {this.doughnutChartLabels =  x.map(x=>x["resourseName"])});
       
     },error => {

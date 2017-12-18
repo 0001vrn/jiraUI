@@ -68,6 +68,20 @@
                                     
                                 </div>
                             </div>
+
+                            <div style="display: block">
+                                <div class="panel panel-primary">
+                                        <div class="panel-heading">Time tracking per story(in hours)</div>
+                                        <div class="panel-body">
+                                            <h5><b>Actual</b><div style="float:right"><b>Estimated</b></div></h5>
+                                            <div *ngFor="let i of timeTrackingPerStory">
+                                                <h5>{{getFixedTime(i.remainingEstimateSeconds+i.timeSpentSeconds)}}<div style="float:right">{{getFixedTime(i.originalEstimateSeconds)}}</div></h5>
+                                            </div>
+                                    
+                                        </div>
+                                
+                            </div>
+                        </div>
                     </div>
                 </div> 
         </div>

@@ -4,7 +4,7 @@ import 'rxjs/add/operator/map'
 import { Observable } from 'rxjs/Observable';
 import { Response } from '@angular/http/src/static_response';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ResourseTimeChart, IndividualStoryPoints } from '../sprint-details/sprint';
+import { ResourseTimeChart, IndividualStoryPoints, TimeTracking } from '../sprint-details/sprint';
 
 @Injectable()
 export class JiraApiService {
@@ -30,7 +30,7 @@ export class JiraApiService {
   getIndividualStoryPoints(boardId:string):Observable<IndividualStoryPoints[]>{
     return this.http.get(this._baseUrl + this._individualStoryPoints + '?boardId='+boardId).map(res => res.json());
   }
-  getSprintActualvsEstimated(boardId:string):Observable<Response>{
+  getSprintActualvsEstimated(boardId:string):Observable<TimeTracking[]>{
     return this.http.get(this._baseUrl + this._sprintActualvsEstimated + '?boardId='+boardId).map(res => res.json());
   }
 }

@@ -33,12 +33,12 @@ export interface IndividualStoryPoints{
     resourseName: string;
     storyPointsAssigned: number;
 }
-// export interface myType {
-//     name : myType2;
-// }
 
-// export interface myType2 {
-//     originalEstimated: number;
-//     remaining:         number;
-//     totalSpent:        number;
-// }
+export interface TimeTracking {
+    originalEstimate:         null;
+    remainingEstimate:        null;
+    timeSpent:                null;
+    originalEstimateSeconds:  number;
+    remainingEstimateSeconds: number;
+    timeSpentSeconds:         number;
+}
