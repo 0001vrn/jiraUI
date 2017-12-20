@@ -111,7 +111,7 @@ export class SprintDetailsComponent implements OnInit ,OnChanges {
   }
   onDateChange(myDate: string){
     //console.log('here is date ' + myDate);
-    debugger
+    
     this.loading = true;
     
     this.boardService.getLoggedHours(this.boardId,myDate).subscribe(res=>{
@@ -130,7 +130,7 @@ export class SprintDetailsComponent implements OnInit ,OnChanges {
   {
     
 
-    debugger
+    
     this.loading=true;
 
 

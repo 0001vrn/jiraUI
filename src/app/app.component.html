@@ -21,7 +21,7 @@
 
             
                 <li><a href="#">{{isloggedIn?'Hi, ' + model.email:''}}</a></li>
-                <li><a (click)="logMeOut()">{{isloggedIn? 'Logout' :''}}</a></li>  
+                <li><a href="#" (click)="logMeOut()">{{isloggedIn? 'Logout' :''}}</a></li>  
                 <li><a [routerLink]="['/login']">{{isloggedIn?'':'Login'}}</a></li>
               
             

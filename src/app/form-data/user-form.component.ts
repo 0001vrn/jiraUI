@@ -40,7 +40,7 @@ export class UserFormComponent implements OnInit {
 
     //store in local storage
     localStorage.setItem("user", this.diagnostic);
-    console.log('localStorage here');
+    //console.log('localStorage here');
 
 
     //do post request to server

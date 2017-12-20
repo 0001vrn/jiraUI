@@ -18,10 +18,9 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy{
   pageTitle = 'JIRA Monitoring System';
   model = new User('','','');
   isloggedIn=false;
-  constructor(private emitterService: EmitterService,private router: Router){
-    
-  }  
+  constructor(private emitterService: EmitterService,private router: Router){}  
   ngOnInit() {
+    this.checkIfLoggedin();
     this.emitter = this.emitterService.key$.subscribe(
       data =>{
         for (let key in data) {
@@ -29,6 +28,28 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy{
       }
     });
     
+  }
+  checkIfLoggedin()
+  {
+      //debugger
+      if(this.isloggedIn)
+      {
+        //debugger
+      }
+      else
+      {
+        //debugger
+        if(localStorage.getItem("user")=="")
+        {
+
+        }
+        else
+        {
+          this.model = JSON.parse(localStorage.getItem("user"));//this line may break the app, use wisely.
+          this.isloggedIn = true;
+        }
+        
+      }
   }
   ngOnChanges() {
     //console.log('changes called');
