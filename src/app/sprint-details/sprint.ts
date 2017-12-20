@@ -20,7 +20,7 @@ export interface ResourseTimeChart
 {
     resourseName :string;
     timeChart :TimeChart;
-    totalSpent:number;
+    totalSpentPerDay:number;
 }
 export interface TimeChart
 {

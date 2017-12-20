@@ -1,7 +1,30 @@
 <ngx-loading [show]="loading && !errorMessage"></ngx-loading>
 <div class="col-md-12 text-center">
         <h1 *ngIf='errorMessage'>{{errorMessage}}</h1>        
-      </div>
+</div>
+<div class="col-md-12 row">
+        <div class="panel with-nav-tabs panel-primary">
+            <div class="panel-heading">
+                    <ul class="nav nav-tabs">
+                        <li [ngClass]="{'active': currentSprintTab == i}" *ngFor="let item of sprintDetailsResponse; let i = index" [attr.data-index]="i" id="{{i}}"><a (click)="openTab(i)" data-toggle="tab">{{item.name}}</a></li>
+                        <!-- <li ><a href="#tab1primary" data-toggle="tab">Primary 1</a></li>
+                        <li ><a href="#tab2primary" data-toggle="tab">Primary 2</a></li>
+                        <li><a href="#tab3primary" data-toggle="tab">Primary 3</a></li>
+                        <li><a href="#tab4primary" data-toggle="tab">Primary 4</a></li> -->
+                    </ul>
+            </div>
+            <!-- <div class="panel-body">
+                <div class="tab-content">
+                    <div class="tab-pane fade in active" id="tab1primary">Primary 1</div>
+                    <div class="tab-pane fade" id="tab2primary">Primary 2</div>
+                    <div class="tab-pane fade" id="tab3primary">Primary 3</div>
+                    <div class="tab-pane fade" id="tab4primary">Primary 4</div>
+                    <div class="tab-pane fade" id="tab5primary">Primary 5</div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+     
 <div class="col-md-12 row" *ngIf="sprintDetails && !errorMessage">
 
         <div class="panel panel-primary">
@@ -41,8 +64,8 @@
                                                 </div>
                                                 <div [@toggleHoursLogged]="stateHours" class="panel-body">
                                                     <div *ngFor="let person of isFromDate?loggedHoursResponse:sprintDetails.timeChart">
-                                                        <h5>{{person.resourseName}}<div style="float:right">Hours logged : {{ isFromDate?getFixedTime(person.totalSpent):getFixedTime(person.timeChart.totalSpent)}}</div></h5>
-                                                        <p-progressBar [ngClass]="false?red:green" [value]="isFromDate?getFixedTime(person.totalSpent)*100/6:getFixedTime(person.timeChart.totalSpent)*100/6" [showValue]="false" unit="hours" ></p-progressBar>
+                                                        <h5>{{person.resourseName}}<div style="float:right">Hours logged : {{ isFromDate?getFixedTime(person.TotalSpent):getFixedTime(person.timeChart.totalSpent)}}</div></h5>
+                                                        <p-progressBar [ngClass]="false?red:green" [value]="isFromDate?getFixedTime(person.TotalSpent)*100/6:getFixedTime(person.timeChart.totalSpent)*100/6" [showValue]="false" unit="hours" ></p-progressBar>
                                                     </div>
                                         </div>
                                     </div>
@@ -87,3 +110,4 @@
         </div>
         
 </div>
+

@@ -8,7 +8,6 @@ import {state, trigger, stagger, animate, style, group, query, transition, keyfr
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { error } from 'selenium-webdriver';
 
 @Component({
   selector: 'app-sprint-details',
@@ -54,17 +53,31 @@ export class SprintDetailsComponent implements OnInit ,OnChanges {
   maxDate;
   ngOnChanges(): void {
     //console.log('change called');
-    this.loading=true;
-    this.errorMessage="";
-    this.myInit();
+    if(localStorage.getItem("user")=="")
+    {
+      this.errorMessage = "Please login first";
+      this.loading = false;
+    }  
+    else
+    {
+      this.errorMessage="";
+      this.myInit();
+    }
+    
+
+    //handle user input for tab switching
+    
+    //set currentSprintTab accordingly
 
   }
 
+  currentSprintTab: number = 0;
+  sprintDetailsResponse: Array<SprintDetail>;
   sprintDetails: SprintDetail;
   @Input() boardId: string;
 
   
-  constructor(private http: HttpClient,private boardService:JiraApiService ) {
+  constructor(private boardService:JiraApiService ) {
     
   }
   trunc(hours:number):number{
@@ -83,13 +96,22 @@ export class SprintDetailsComponent implements OnInit ,OnChanges {
     }
   }
   ngOnInit() {
-    this.loading=true;
-    this.myInit();
-    this.red='red red-parent';
-    this.green='green red-parent';
+    if(localStorage.getItem("user")=="")
+    {
+      this.errorMessage = "Please login first";
+      this.loading = false;
+    }  
+    else
+    {
+      this.myInit();
+      this.red='red red-parent';
+      this.green='green red-parent';
+    }
+    
   }
   onDateChange(myDate: string){
-    //console.log('here is date ' + myDate); 
+    //console.log('here is date ' + myDate);
+    debugger
     this.loading = true;
     
     this.boardService.getLoggedHours(this.boardId,myDate).subscribe(res=>{
@@ -106,11 +128,17 @@ export class SprintDetailsComponent implements OnInit ,OnChanges {
   }
   myInit()
   {
+    
+
+    debugger
+    this.loading=true;
+
+
     if(this.ctr==0){
       this.ctr++;
       return;
     }
-
+      
       this.boardService.getSprintActualvsEstimated(this.boardId).subscribe(res =>{
         this.timeTrackingPerStory = res;
       }
@@ -127,9 +155,11 @@ export class SprintDetailsComponent implements OnInit ,OnChanges {
       });
 
       this.boardService.getActiveSprint(this.boardId).subscribe(res => {
-      //console.log(res);
-      this.sprintDetails =res[0];
       this.loading=false;
+      //console.log(res);
+      this.sprintDetailsResponse = res;
+      this.sprintDetails = this.sprintDetailsResponse[this.currentSprintTab];
+      
       if(this.sprintDetails == undefined)
       {  
         this.setError();
@@ -145,6 +175,7 @@ export class SprintDetailsComponent implements OnInit ,OnChanges {
       var x=this.sprintDetails.timeChart;
       this.isFromDate = false;
       //console.log(this.datePick);
+      //console.log(this.sprintDetails.name);
       this.doughnutChartData= x.map(x=>x["timeChart"]["originalEstimated"]);
       
       //console.log(this.getReadableTime(x.map(x=>x["timeChart"]["totalSpent"]).reduce((a,b)=>a+b)));
@@ -154,6 +185,7 @@ export class SprintDetailsComponent implements OnInit ,OnChanges {
       
     },error => {
       this.setError();
+      this.loading=false;
       }
   );
   }
@@ -206,5 +238,13 @@ export class SprintDetailsComponent implements OnInit ,OnChanges {
   public toggleTimeEst(){
     this.stateTimeEst = (this.stateTimeEst=="open")? "closed": "open";
     this.isTimeEstUp = (this.stateTimeEst=="open")? true: false;
+  }
+
+  
+  openTab(index)
+  {
+    console.log("Hi from tab "+ index);
+    this.currentSprintTab = index;
+    
   }
 }

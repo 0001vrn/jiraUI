@@ -18,7 +18,13 @@
               <li><a [routerLink]="['/contact']">Contact Us</a></li>
           </ul>
           <ul class='nav navbar-nav navbar-right'>
-            <li><a [routerLink]="['/login']">Login</a></li>
+
+            
+                <li><a href="#">{{isloggedIn?'Hi, ' + model.email:''}}</a></li>
+                <li><a (click)="logMeOut()">{{isloggedIn? 'Logout' :''}}</a></li>  
+                <li><a [routerLink]="['/login']">{{isloggedIn?'':'Login'}}</a></li>
+              
+            
           </ul>
         </div>
       </div>

@@ -46,6 +46,8 @@ import { MatDatepickerModule,
   MatToolbarModule,
   MatTooltipModule } from '@angular/material';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { EmitterService } from './helper/emitter.service';
+
 
 
 @NgModule({
@@ -104,13 +106,19 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
         { path: 'home', component: HomeComponent },
         { path: 'about', component: AboutComponent },
         { path: 'contact', component: ContactComponent },
-        { path: '', redirectTo: 'home', pathMatch: 'full' },
-        { path: '**', redirectTo: 'home', pathMatch: 'full' }
+        { path: '', redirectTo: 'login', pathMatch: 'full' },
+        { path: '**', redirectTo: 'login', pathMatch: 'full' }
       ]),ProgressBarModule,
   ],
-  providers: [ JiraApiService,
-    {provide: MAT_DATE_LOCALE, useValue: 'en-US'},
+  providers: [ 
+    JiraApiService,
+    EmitterService,
+    {
+      provide: MAT_DATE_LOCALE, 
+      useValue: 'en-US'
+    },
    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+  
